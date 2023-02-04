@@ -1,8 +1,12 @@
+
+
+
 // Game "rock, paper, scissors" player vs computer
 const OPTIONS_ARR = ["rock", "paper", "scissors"];
 let computerWins = 0;
 let playerWins = 0;
 game()
+
 
 // Run the game
 function game() {
@@ -47,43 +51,28 @@ function gameResult() {
 // Determine the winner
 function playRound(playerSelection, computerSelection) {
     let result;
-    switch (playerSelection) {
-        case "rock":
-            if (computerSelection === "scissors") {
-                result = "You Win! Rock beats Scissors."
-                playerWins++;
-            } else if (computerSelection === "paper") {
-                result = "You Lose! Paper beats Rock."
-                computerWins++;
-            } else {
-                result = "It's a Draw! Rock can't beat Rock.";
-            }
-            break;
-        case "paper":
-            if (computerSelection === "rock") {
-                result = "You Win! Paper beats Rock."
-                playerWins++;
-            } else if (computerSelection === "scissors") {
-                result = "You Lose! Scissors beats Paper.";
-                computerWins++;
-            } else {
-                result = "It's a Draw! Paper can't beat Paper.";
-            }
-            break;
-        case "scissors":
-            if (computerSelection === "paper") {
-                result = "You Win! Scissors beats Paper."
-                playerWins++;
-            } else if (computerSelection === "rock") {
-                result = "You Lose! Rock beats Scissors.";
-                computerWins++;
-            } else {
-                result = "It's a Draw! Scissors can't beat Scissors."
-            }
-            break;
+    const playerSelUpper = firstLetterToUppercase(playerSelection)
+    const computerSelUpper = firstLetterToUppercase(computerSelection)
+
+    if (playerSelection === computerSelection) {
+        result = `It's a draw. Both players choose ${playerSelUpper}.`;
+        return result;
+    }
+   
+    if ((playerSelection === 'rock' && computerSelection === 'scissors')
+    || (playerSelection === 'paper' && computerSelection === 'rock')
+    || (playerSelection === 'scissors' && computerSelection === 'paper')) {
+        result = `You Win! ${playerSelUpper} beats ${computerSelUpper}.`;
+        return result;
     }
 
+    result = `You Lose! ${computerSelUpper} beats ${playerSelUpper}.`;
     return result;
+}
+
+// Make the first letter of a string capital
+function firstLetterToUppercase(string) {
+    string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 // Get right input from player
@@ -92,6 +81,7 @@ function userPlay(round) {
         "err": "",
         'str': ""
     };
+
 
     while (promptResp.str === "") {
         let message = "";
@@ -121,21 +111,32 @@ function userPlay(round) {
 function promptReq(message, promptResp) {
     let inputStr = prompt(message, "")
 
-    if (inputStr === null) promptResp.err = "1";
-    else {
-        inputStr = inputStr.trim();
+    if (inputStr === null) {
+        promptResp.err = "1";
+        return promptResp;
+    };
 
-        if (inputStr === "") promptResp.err = "2";
-        else {
-            inputStr = inputStr.toLowerCase()
-            let check = OPTIONS_ARR.includes(inputStr);
+    inputStr = inputStr.trim();
+    if (inputStr === "") {
+        promptResp.err = "2"
+        return promptResp;
+    }
 
-            if (!check) promptResp.err = "3";
-            else {
-                promptResp.err = "";
-                promptResp.str = inputStr;
-            }
-        }
+    inputStr = inputStr.toLowerCase();
+
+    if(inputStr==="help") {
+        promptResp.err = ""
+        showHelpMessage()
+        return promptResp;
+
+    }
+    let check = OPTIONS_ARR.includes(inputStr);
+
+    if (!check) {
+        promptResp.err = "3";
+    }else {
+        promptResp.err = "";
+        promptResp.str = inputStr;
     }
 
     return promptResp;
