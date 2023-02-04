@@ -92,7 +92,6 @@ function userPlay(round) {
                     console.log("Buy buy!")
                     return;
                 } else {
-                    console.log('yes')
                     message = round + "\nSo let's do that! Please enter your option.\nOptions: (rock, paper, scissors)";
                     promptResp = promptReq(message, promptResp)
                 }
