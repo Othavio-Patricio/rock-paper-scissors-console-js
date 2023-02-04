@@ -15,11 +15,11 @@ function game() {
         const playerSelection = userPlay(round)
         const computerSelection = computerPlay()
 
+
         if (playerSelection === undefined) break;
-        else {
-            const roundResult = playRound(playerSelection, computerSelection)
-            console.log(roundResult)
-        }
+
+        const roundResult = playRound(playerSelection, computerSelection)
+        console.log("-"+roundResult+"-")
     }
 
     gameResult()
@@ -62,10 +62,12 @@ function playRound(playerSelection, computerSelection) {
         || (playerSelection === 'paper' && computerSelection === 'rock')
         || (playerSelection === 'scissors' && computerSelection === 'paper')) {
         result = `You Win! ${playerSelUpper} beats ${computerSelUpper}.`;
+        playerWins++;
         return result;
     }
 
     result = `You Lose! ${computerSelUpper} beats ${playerSelUpper}.`;
+    computerWins++;
     return result;
 }
 
