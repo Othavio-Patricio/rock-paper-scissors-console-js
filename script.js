@@ -85,7 +85,8 @@ function userPlay(round) {
 
 
     while (promptResp.str === "") {
-        let message = "";
+        let message = round+"\n";
+        const info = '\nOptions: rock, paper, scissors \nType "help" to get instructions'
         switch (promptResp.err) {
             case "1":
                 let conf = confirm("Do you really want to leave the game?")
@@ -94,20 +95,20 @@ function userPlay(round) {
                     console.log("Buy buy!")
                     return;
                 } else {
-                    message = round + "\nSo let's do that! Please enter your option.\nOptions: (rock, paper, scissors)";
+                    message += "So let's do that! Please enter your option."+info;
                     promptResp = promptReq(message, promptResp)
                 }
                 break;
             case "2":
-                message = round + "\nCome on! You just need to enter your option in the input box below.\nOptions: (rock, paper, scissors)";
+                message += "Come on! You just need to enter your option in the input box below."+info;
                 promptResp = promptReq(message, promptResp)
                 break;
             case "3":
-                message = round + "\nIf you keep going with non-existent options, we will never finish the game!\nOptions: (rock, paper, scissors)";
+                message += "If you keep going with non-existent options, we will never finish the game!"+info;
                 promptResp = promptReq(message, promptResp)
                 break;
             default:
-                message = round + '\nGame "rock, paper, scissors". Please enter your option.\nOptions: (rock, paper, scissors)';
+                message += 'Game "rock, paper, scissors". Please enter your option.'+info;
                 promptResp = promptReq(message, promptResp)
         }
     }
