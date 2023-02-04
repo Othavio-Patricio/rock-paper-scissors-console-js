@@ -15,7 +15,6 @@ function game() {
         const playerSelection = userPlay(round)
         const computerSelection = computerPlay()
 
-
         if (playerSelection === undefined) break;
 
         const roundResult = playRound(playerSelection, computerSelection)
@@ -28,19 +27,15 @@ function game() {
 // Finish the game
 function gameResult() {
     let gameResult;
-    let message;
 
     if (playerWins > computerWins) {
         gameResult = `You Win! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
-        message = "You are a lucky fellow. Let me win back.";
     }
     else if (playerWins < computerWins) {
         gameResult = `You Lose! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
-        message = "I'm generous - I'll give you the opportunity to recoup. Again?"
     }
     else {
         gameResult = `It is a Draw! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
-        message = "Only one will remain! Again?"
     }
 
     console.log("----------------------------------")
