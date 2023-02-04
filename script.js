@@ -15,8 +15,11 @@ function game() {
         const playerSelection = userPlay(round)
         const computerSelection = computerPlay()
 
-        const roundResult = playRound(playerSelection, computerSelection)
-        console.log(roundResult)
+        if (playerSelection === undefined) break;
+        else {
+            const roundResult = playRound(playerSelection, computerSelection)
+            console.log(roundResult)
+        }
     }
 
     gameResult()
@@ -42,10 +45,6 @@ function gameResult() {
 
     console.log("----------------------------------")
     console.log(gameResult)
-
-    setTimeout(() => {
-        oneMoreGame(message)
-    }, 1000)
 }
 
 // Determine the winner
@@ -58,10 +57,10 @@ function playRound(playerSelection, computerSelection) {
         result = `It's a draw. Both players choose ${playerSelUpper}.`;
         return result;
     }
-   
+
     if ((playerSelection === 'rock' && computerSelection === 'scissors')
-    || (playerSelection === 'paper' && computerSelection === 'rock')
-    || (playerSelection === 'scissors' && computerSelection === 'paper')) {
+        || (playerSelection === 'paper' && computerSelection === 'rock')
+        || (playerSelection === 'scissors' && computerSelection === 'paper')) {
         result = `You Win! ${playerSelUpper} beats ${computerSelUpper}.`;
         return result;
     }
@@ -72,7 +71,7 @@ function playRound(playerSelection, computerSelection) {
 
 // Make the first letter of a string capital
 function firstLetterToUppercase(string) {
-    string.charAt(0).toUpperCase() + string.slice(1);
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 // Get right input from player
@@ -87,8 +86,16 @@ function userPlay(round) {
         let message = "";
         switch (promptResp.err) {
             case "1":
-                message = round + "\nDon't do that! Let's play! Please enter your option.\nOptions: (rock, paper, scissors)";
-                promptResp = promptReq(message, promptResp)
+                let conf = confirm("Do you really want to leave the game?")
+                if (conf) {
+                    // Here you can add anything
+                    console.log("Buy buy!")
+                    return;
+                } else {
+                    console.log('yes')
+                    message = round + "\nSo let's do that! Please enter your option.\nOptions: (rock, paper, scissors)";
+                    promptResp = promptReq(message, promptResp)
+                }
                 break;
             case "2":
                 message = round + "\nCome on! You just need to enter your option in the input box below.\nOptions: (rock, paper, scissors)";
@@ -124,9 +131,9 @@ function promptReq(message, promptResp) {
 
     inputStr = inputStr.toLowerCase();
 
-    if(inputStr==="help") {
+    if (inputStr === "help") {
         promptResp.err = ""
-        showHelpMessage()
+        // showHelpMessage()
         return promptResp;
 
     }
@@ -134,7 +141,7 @@ function promptReq(message, promptResp) {
 
     if (!check) {
         promptResp.err = "3";
-    }else {
+    } else {
         promptResp.err = "";
         promptResp.str = inputStr;
     }
@@ -148,17 +155,6 @@ function computerPlay() {
 }
 
 
-// Start one more game
-function oneMoreGame(message) {
-    let conf = confirm(message)
-
-    if (conf) document.location.reload()
-    else {
-        setTimeout(() => {
-            oneMoreGame("Psst...Hey, you. What about a game with a very kind computer?")
-        }, 3000)
-    }
-}
 
 
 
