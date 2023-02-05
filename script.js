@@ -10,41 +10,43 @@ game()
 
 // Run the game
 function game() {
+    let roundsFinished = 1;
     for (let i = 1; i < 6; i++) {
-        const round = 'Round ' + i;
-        const playerSelection = userPlay(round)
+        const playerSelection = userPlay(i)
         const computerSelection = computerPlay()
-
 
         if (playerSelection === undefined) break;
 
-        const roundResult = playRound(playerSelection, computerSelection)
-        console.log("-"+roundResult+"-")
-    }
+        roundsFinished = i;
 
-    gameResult()
+        const roundResult = playRound(playerSelection, computerSelection)
+        console.log(roundResult)
+    }
+    
+    gameResult(roundsFinished)
 }
 
 // Finish the game
-function gameResult() {
-    let gameResult;
-    let message;
+function gameResult(roundsFinished) {
+    let gameResult = "";
 
-    if (playerWins > computerWins) {
+    if(roundsFinished<5) {
+        gameResult += "\n"
+        gameResult += `You escaped the game after round "${roundsFinished}"\n` 
+        gameResult += `Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.\n`
+    }
+    else if (playerWins > computerWins) {
         gameResult = `You Win! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
-        message = "You are a lucky fellow. Let me win back.";
     }
     else if (playerWins < computerWins) {
         gameResult = `You Lose! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
-        message = "I'm generous - I'll give you the opportunity to recoup. Again?"
     }
     else {
         gameResult = `It is a Draw! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
-        message = "Only one will remain! Again?"
     }
 
-    console.log("----------------------------------")
-    console.log(gameResult)
+    gameResult += `\nTo restart the game refresh the page please.`
+    console.log("\n"+gameResult)
 }
 
 // Determine the winner
@@ -85,16 +87,13 @@ function userPlay(round) {
 
 
     while (promptResp.str === "") {
-        let message = round+"\n";
+        let message = "Round "+round+"\n";
         const info = '\nOptions: rock, paper, scissors \nType "help" to get instructions'
         switch (promptResp.err) {
             case "1":
                 let conf = confirm("Do you really want to leave the game?")
-                if (conf) {
-                    // Here you can add anything
-                    console.log("Buy buy!")
-                    return;
-                } else {
+                if (conf) return;
+                else {
                     message += "So let's do that! Please enter your option."+info;
                     promptResp = promptReq(message, promptResp)
                 }
@@ -135,7 +134,7 @@ function promptReq(message, promptResp) {
 
     if (inputStr === "help") {
         promptResp.err = ""
-        // showHelpMessage()
+        showHelpMessage()
         return promptResp;
 
     }
@@ -154,6 +153,21 @@ function promptReq(message, promptResp) {
 // Generate computer's answer
 function computerPlay() {
     return OPTIONS_ARR[Math.floor(Math.random() * 3)];
+}
+
+// Help message
+function showHelpMessage() {
+    let message = "Game information:\n";
+    message+='* The game "Rock, Paper, Scissors" has 5 rounds. You play against the computer.\n'
+    message+='* The progress of the game is available in the console.\n'
+    message+='* To play you need to select one of the following options each round: rock, paper or scissors.\n'
+    message+='* Type your selection in the input box and press "OK" button.\n'
+    message+='* The computer will select random option by itself.\n'
+    message+='* After 5 rpounds you will see the result of the whole game in the console.\n'
+    message+="* The game is breathtaking and it's FREE! Enjoy!\n"
+    message+="~"
+
+    console.log(message)
 }
 
 
