@@ -10,25 +10,32 @@ game()
 
 // Run the game
 function game() {
+    let roundsFinished = 1;
     for (let i = 1; i < 6; i++) {
-        const round = 'Round ' + i;
-        const playerSelection = userPlay(round)
+        const playerSelection = userPlay(i)
         const computerSelection = computerPlay()
 
         if (playerSelection === undefined) break;
 
+        roundsFinished = i;
+
         const roundResult = playRound(playerSelection, computerSelection)
         console.log("-"+roundResult+"-")
     }
-
-    gameResult()
+    
+    gameResult(roundsFinished)
 }
 
 // Finish the game
-function gameResult() {
-    let gameResult;
+function gameResult(roundsFinished) {
+    let gameResult = "";
 
-    if (playerWins > computerWins) {
+    if(roundsFinished<5) {
+        gameResult += "\n"
+        gameResult += `You escaped the game after round "${roundsFinished}"\n` 
+        gameResult += `Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.\n`
+    }
+    else if (playerWins > computerWins) {
         gameResult = `You Win! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
     }
     else if (playerWins < computerWins) {
@@ -38,8 +45,8 @@ function gameResult() {
         gameResult = `It is a Draw! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
     }
 
-    console.log("----------------------------------")
-    console.log(gameResult)
+    gameResult += `\nTo restart the game refresh the page please.`
+    console.log("\n"+gameResult)
 }
 
 // Determine the winner
@@ -80,14 +87,14 @@ function userPlay(round) {
 
 
     while (promptResp.str === "") {
-        let message = round+"\n";
+        let message = "Round "+round+"\n";
         const info = '\nOptions: rock, paper, scissors \nType "help" to get instructions'
         switch (promptResp.err) {
             case "1":
                 let conf = confirm("Do you really want to leave the game?")
                 if (conf) {
                     // Here you can add anything
-                    console.log("Buy buy!")
+                    // console.log("Buy buy!")
                     return;
                 } else {
                     message += "So let's do that! Please enter your option."+info;
