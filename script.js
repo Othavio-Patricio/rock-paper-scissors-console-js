@@ -20,7 +20,7 @@ function game() {
         roundsFinished = i;
 
         const roundResult = playRound(playerSelection, computerSelection)
-        console.log("-"+roundResult+"-")
+        console.log(roundResult)
     }
     
     gameResult(roundsFinished)
@@ -92,11 +92,8 @@ function userPlay(round) {
         switch (promptResp.err) {
             case "1":
                 let conf = confirm("Do you really want to leave the game?")
-                if (conf) {
-                    // Here you can add anything
-                    // console.log("Buy buy!")
-                    return;
-                } else {
+                if (conf) return;
+                else {
                     message += "So let's do that! Please enter your option."+info;
                     promptResp = promptReq(message, promptResp)
                 }
@@ -137,7 +134,7 @@ function promptReq(message, promptResp) {
 
     if (inputStr === "help") {
         promptResp.err = ""
-        // showHelpMessage()
+        showHelpMessage()
         return promptResp;
 
     }
@@ -156,6 +153,21 @@ function promptReq(message, promptResp) {
 // Generate computer's answer
 function computerPlay() {
     return OPTIONS_ARR[Math.floor(Math.random() * 3)];
+}
+
+// Help message
+function showHelpMessage() {
+    let message = "Game information:\n";
+    message+='* The game "Rock, Paper, Scissors" has 5 rounds. You play against the computer.\n'
+    message+='* The progress of the game is available in the console.\n'
+    message+='* To play you need to select one of the following options each round: rock, paper or scissors.\n'
+    message+='* Type your selection in the input box and press "OK" button.\n'
+    message+='* The computer will select random option by itself.\n'
+    message+='* After 5 rpounds you will see the result of the whole game in the console.\n'
+    message+="* The game is breathtaking and it's FREE! Enjoy!\n"
+    message+="~"
+
+    console.log(message)
 }
 
 
