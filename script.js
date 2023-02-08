@@ -1,6 +1,4 @@
 
-
-
 // Game "rock, paper, scissors" player vs computer
 const OPTIONS_ARR = ["rock", "paper", "scissors"];
 let computerWins = 0;
@@ -22,7 +20,7 @@ function game() {
         const roundResult = playRound(playerSelection, computerSelection)
         console.log(roundResult)
     }
-    
+
     gameResult(roundsFinished)
 }
 
@@ -30,9 +28,9 @@ function game() {
 function gameResult(roundsFinished) {
     let gameResult = "";
 
-    if(roundsFinished<5) {
+    if (roundsFinished < 5) {
         gameResult += "\n"
-        gameResult += `You escaped the game after round "${roundsFinished}"\n` 
+        gameResult += `You escaped the game after round "${roundsFinished}"\n`
         gameResult += `Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.\n`
     }
     else if (playerWins > computerWins) {
@@ -46,7 +44,7 @@ function gameResult(roundsFinished) {
     }
 
     gameResult += `\nTo restart the game refresh the page please.`
-    console.log("\n"+gameResult)
+    console.log("\n" + gameResult)
 }
 
 // Determine the winner
@@ -84,30 +82,30 @@ function userPlay(round) {
         "err": "",
         'str': ""
     };
-
+    const info = '\nOptions: rock, paper, scissors \nType "help" to get instructions'
 
     while (promptResp.str === "") {
-        let message = "Round "+round+"\n";
-        const info = '\nOptions: rock, paper, scissors \nType "help" to get instructions'
+        let message = "Round " + round + "\n";
+
         switch (promptResp.err) {
             case "1":
                 let conf = confirm("Do you really want to leave the game?")
                 if (conf) return;
                 else {
-                    message += "So let's do that! Please enter your option."+info;
+                    message += "So let's do that! Please enter your option." + info;
                     promptResp = promptReq(message, promptResp)
                 }
                 break;
             case "2":
-                message += "Come on! You just need to enter your option in the input box below."+info;
+                message += "Come on! You just need to enter your option in the input box below." + info;
                 promptResp = promptReq(message, promptResp)
                 break;
             case "3":
-                message += "If you keep going with non-existent options, we will never finish the game!"+info;
+                message += "If you keep going with non-existent options, we will never finish the game!" + info;
                 promptResp = promptReq(message, promptResp)
                 break;
             default:
-                message += 'Game "rock, paper, scissors". Please enter your option.'+info;
+                message += 'Game "rock, paper, scissors". Please enter your option.' + info;
                 promptResp = promptReq(message, promptResp)
         }
     }
@@ -158,14 +156,14 @@ function computerPlay() {
 // Help message
 function showHelpMessage() {
     let message = "Game information:\n";
-    message+='* The game "Rock, Paper, Scissors" has 5 rounds. You play against the computer.\n'
-    message+='* The progress of the game is available in the console.\n'
-    message+='* To play you need to select one of the following options each round: rock, paper or scissors.\n'
-    message+='* Type your selection in the input box and press "OK" button.\n'
-    message+='* The computer will select random option by itself.\n'
-    message+='* After 5 rpounds you will see the result of the whole game in the console.\n'
-    message+="* The game is breathtaking and it's FREE! Enjoy!\n"
-    message+="~"
+    message += '* The game "Rock, Paper, Scissors" has 5 rounds. You play against the computer.\n'
+    message += '* The progress of the game is available in the console.\n'
+    message += '* To play you need to select one of the following options each round: rock, paper or scissors.\n'
+    message += '* Type your selection in the input box and press "OK" button.\n'
+    message += '* The computer will select random option by itself.\n'
+    message += '* After 5 rpounds you will see the result of the whole game in the console.\n'
+    message += "* The game is breathtaking and it's FREE! Enjoy!\n"
+    message += "~"
 
     console.log(message)
 }
