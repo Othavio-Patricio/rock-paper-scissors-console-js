@@ -1,6 +1,7 @@
+const aliasPrompt = prompt("Enter your player alias")
+let currentUser = (aliasPrompt!=null && aliasPrompt.trim()!="") ? aliasPrompt.trim() : "Player";
 
-let currentUser = prompt("Enter your player alias");
-alert(`Welcome ${firstLetterToUppercase(currentUser)}`);
+alert(`Welcome ${currentUser}`);
 
 
 // Game "rock, paper, scissors" player vs computer
@@ -35,18 +36,18 @@ function gameResult(roundsFinished) {
    
     if(roundsFinished<5) {
         gameResult += "\n"
-        gameResult += `${firstLetterToUppercase(currentUser)} you escaped the game after round "${roundsFinished}"\n` 
-        gameResult += `${firstLetterToUppercase(currentUser)}'s score: ${playerWins} wins. Computer's score: ${computerWins} wins.\n`
+        gameResult += `${currentUser} you escaped the game after round "${roundsFinished}"\n` 
+        gameResult += `${currentUser}'s score: ${playerWins} wins. Computer's score: ${computerWins} wins.\n`
 
     }
     else if (playerWins > computerWins) {
-        gameResult = `${firstLetterToUppercase(currentUser)} Wins! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
+        gameResult = `${currentUser} Wins! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
     }
     else if (playerWins < computerWins) {
-        gameResult = `${firstLetterToUppercase(currentUser)} you Lose! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
+        gameResult = `${currentUser} Loses! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
     }
     else {
-        gameResult = `It is a Draw! ${firstLetterToUppercase(currentUser)} score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
+        gameResult = `It is a Draw! ${currentUser} score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
     }
 
     gameResult += `\nTo restart the game refresh the page please.`
@@ -68,19 +69,14 @@ function playRound(playerSelection, computerSelection) {
     if ((playerSelection === 'rock' && computerSelection === 'scissors')
         || (playerSelection === 'paper' && computerSelection === 'rock')
         || (playerSelection === 'scissors' && computerSelection === 'paper')) {
-        result = `${firstLetterToUppercase(currentUser)} Wins! ${playerSelUpper} beats ${computerSelUpper}.`;
+        result = `${currentUser} Wins! ${playerSelUpper} beats ${computerSelUpper}.`;
         playerWins++;
         return result;
     }
 
-    result = `${firstLetterToUppercase(currentUser)} you Lose! ${computerSelUpper} beats ${playerSelUpper}.`;
+    result = `${currentUser} you Lose! ${computerSelUpper} beats ${playerSelUpper}.`;
     computerWins++;
     return result;
-}
-
-// Make the first letter of a string capital
-function firstLetterToUppercase(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 // Get right input from player
@@ -97,7 +93,7 @@ function userPlay(round) {
 
         switch (promptResp.err) {
             case "1":
-                let conf = confirm(`${firstLetterToUppercase(currentUser)} do you really want to leave the game?`)
+                let conf = confirm(`${currentUser} do you really want to leave the game?`)
                 if (conf) return;
                 else {
                     message += "So let's do that! Please enter your option." + info;
@@ -106,7 +102,7 @@ function userPlay(round) {
                 break;
             case "2":
 
-                message += `Come on! ${firstLetterToUppercase(currentUser)} you just need to enter your option in the input box below.`+info;
+                message += `Come on! ${currentUser} you just need to enter your option in the input box below.`+info;
 
                 promptResp = promptReq(message, promptResp)
                 break;
@@ -163,6 +159,12 @@ function computerPlay() {
     return OPTIONS_ARR[Math.floor(Math.random() * 3)];
 }
 
+
+// Make the first letter of a string capital
+function firstLetterToUppercase(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 // Help message
 function showHelpMessage() {
     let message = "Game information:\n";
@@ -177,6 +179,7 @@ function showHelpMessage() {
 
     console.log(message)
 }
+
 function overalResults () {
     checkLocalStorage ();
     let overalResult = localStorage.getItem("overalgameResults")
@@ -194,6 +197,7 @@ function overalResults () {
     localStorage.setItem("overalgameResults", JSON.stringify(overalResult))
     return overalResult
 }
+
 function checkLocalStorage () {
     let overalResult = localStorage.getItem("overalgameResults")
     overalResult = JSON.parse(overalResult)
