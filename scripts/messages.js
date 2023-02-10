@@ -1,7 +1,4 @@
 const messages = {
-  alertStartMessage: `Choose between rock, paper and scissors.
-You can also type help to recive more informations.
-Don't forget to open the console`,
   gameStopMessage: `
 ┈ ✁✃✁✃✁✃✁✃✁✁✃✁✃✁✃✁✃✁✁✃✁✃✁✃✁✃✁✁✁✃✁✃✁✃✁✃✁✁✃✁✁✃✁✃✁✃✁✃✁✁✃ ┈
               The game was interrupted!
@@ -319,7 +316,6 @@ export const {
 } = arts
 
 export const {
-  alertStartMessage,
   gameStopMessage,
   helpMessage,
   uknownCommandMessage
