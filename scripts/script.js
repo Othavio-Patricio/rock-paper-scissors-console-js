@@ -1,8 +1,16 @@
-const aliasPrompt = prompt("Enter your player alias")
-let currentUser = (aliasPrompt!=null && aliasPrompt.trim()!="") ? aliasPrompt.trim() : "Player";
+import {
+    helpMessage,
+    gameStopMessage,
+    uknownCommandMessage,
+    startArt,
+    roundsNumberArt,
+    fightArt,
+    resultsArt,
+} from "./messages.js";
 
-alert(`Welcome ${currentUser}`);
 
+let currentUser;
+verifyPlayer();
 
 // Game "rock, paper, scissors" player vs computer
 const OPTIONS_ARR = ["rock", "paper", "scissors"];
@@ -11,11 +19,12 @@ let playerWins = 0;
 
 game()
 
-
 // Run the game
 function game() {
+    console.log(startArt);
     let roundsFinished = 1;
     for (let i = 1; i < 6; i++) {
+        console.log(roundsNumberArt[i])
         const playerSelection = userPlay(i)
         const computerSelection = computerPlay()
 
@@ -23,6 +32,7 @@ function game() {
 
         roundsFinished = i;
 
+        roundFightArt(playerSelection, computerSelection);
         const roundResult = playRound(playerSelection, computerSelection)
         console.log(roundResult)
     }
@@ -35,23 +45,28 @@ function gameResult(roundsFinished) {
     let gameResult = "";
    
     if(roundsFinished<5) {
-        gameResult += "\n"
-        gameResult += `${currentUser} you escaped the game after round "${roundsFinished}"\n` 
-        gameResult += `${currentUser}'s score: ${playerWins} wins. Computer's score: ${computerWins} wins.\n`
-
+        console.log(gameStopMessage)
+        return;
     }
     else if (playerWins > computerWins) {
-        gameResult = `${currentUser} Wins! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
+        console.log(resultsArt.victory);
+        gameResult = `${currentUser} Wins! Final score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
     }
     else if (playerWins < computerWins) {
-        gameResult = `${currentUser} Loses! Your score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
+        console.log(resultsArt.defeat);
+        gameResult = `${currentUser} Loses! Final score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
     }
     else {
-        gameResult = `It is a Draw! ${currentUser} score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
+        console.log(resultsArt.draw);
+        gameResult = `It is a Draw! ${currentUser} final score: ${playerWins} wins. Computer's score: ${computerWins} wins.`
     }
 
-    gameResult += `\nTo restart the game refresh the page please.`
-    console.log("\n" + gameResult)
+    gameResult += `
+┍━━━━━━━━━━━━━━━━━━━━━━━━━☟━━━━━━━━━━━━━━━━━━━━━━━━━┑
+        You can reload the page to Play Again  
+┕━━━━━━━━━━━━━━━━━━━━━━━━━☝︎━━━━━━━━━━━━━━━━━━━━━━━━━┙`
+    console.log("\n" + gameResult);
+    overalResults();
 }
 
 
@@ -73,7 +88,6 @@ function playRound(playerSelection, computerSelection) {
         playerWins++;
         return result;
     }
-
     result = `${currentUser} you Lose! ${computerSelUpper} beats ${playerSelUpper}.`;
     computerWins++;
     return result;
@@ -108,6 +122,7 @@ function userPlay(round) {
                 break;
             case "3":
                 message += "If you keep going with non-existent options, we will never finish the game!" + info;
+                uknownCommandHandler()
                 promptResp = promptReq(message, promptResp)
                 break;
             default:
@@ -138,7 +153,7 @@ function promptReq(message, promptResp) {
 
     if (inputStr === "help") {
         promptResp.err = ""
-        showHelpMessage()
+        showHelpMessage();
         return promptResp;
 
     }
@@ -154,6 +169,10 @@ function promptReq(message, promptResp) {
     return promptResp;
 }
 
+function uknownCommandHandler() {
+    console.log(uknownCommandMessage);
+}
+
 // Generate computer's answer
 function computerPlay() {
     return OPTIONS_ARR[Math.floor(Math.random() * 3)];
@@ -167,22 +186,29 @@ function firstLetterToUppercase(string) {
 
 // Help message
 function showHelpMessage() {
-    let message = "Game information:\n";
-    message += '* The game "Rock, Paper, Scissors" has 5 rounds. You play against the computer.\n'
-    message += '* The progress of the game is available in the console.\n'
-    message += '* To play you need to select one of the following options each round: rock, paper or scissors.\n'
-    message += '* Type your selection in the input box and press "OK" button.\n'
-    message += '* The computer will select random option by itself.\n'
-    message += '* After 5 rpounds you will see the result of the whole game in the console.\n'
-    message += "* The game is breathtaking and it's FREE! Enjoy!\n"
-    message += "~"
+    console.log(helpMessage);
+}
 
-    console.log(message)
+function verifyPlayer() {
+    const lastPlayer = localStorage.getItem('lastPlayer');
+    if (lastPlayer) {
+        const conf = confirm(`Keep Playing as ${lastPlayer}?`);
+        if (conf) {
+            currentUser = lastPlayer
+        }
+    }
+    if (!currentUser) {
+        const aliasPrompt = prompt("Enter your player alias");
+        currentUser = (aliasPrompt!=null && aliasPrompt.trim()!="") ? aliasPrompt.trim() : "Player";
+        localStorage.setItem('lastPlayer', currentUser)
+        alert(`Welcome ${currentUser}`);
+    }
 }
 
 function overalResults () {
     checkLocalStorage ();
-    let overalResult = localStorage.getItem("overalgameResults")
+    const lowerCaseUser = currentUser.toLowerCase();
+    let overalResult = localStorage.getItem(`${lowerCaseUser}Score`)
     overalResult = JSON.parse(overalResult)
     if (playerWins > computerWins) {
         overalResult[0]++
@@ -193,17 +219,24 @@ function overalResults () {
     else {
         overalResult[2]++
     }
-    console.log(`Overal Results for ${currentUser}: \nWins: ${overalResult[0]}, Losses: ${overalResult[1]}, Draws: ${overalResult[2]}`)
-    localStorage.setItem("overalgameResults", JSON.stringify(overalResult))
+    console.log(`
+╔═════════════════════════════════════════════╗
+        ${currentUser.toUpperCase()} TOTAL SCORE IS:
+    ${overalResult[0]} VICTORIES
+    ${overalResult[1]} DEFEATS
+    ${overalResult[2]} DRAWS
+╚═════════════════════════════════════════════╝`)
+    localStorage.setItem(`${lowerCaseUser}Score`, JSON.stringify(overalResult))
     return overalResult
 }
 
 function checkLocalStorage () {
-    let overalResult = localStorage.getItem("overalgameResults")
+    const lowerCaseUser = currentUser.toLowerCase();
+    let overalResult = localStorage.getItem(`${lowerCaseUser}Score`)
     overalResult = JSON.parse(overalResult)
     const arr = [0,0,0]
     if (!overalResult) {
-        localStorage.setItem('overalgameResults', JSON.stringify(arr));
+        localStorage.setItem(`${lowerCaseUser}Score`, JSON.stringify(arr));
         return
     }
     const winsToInt = parseInt(overalResult[0]);
@@ -211,12 +244,18 @@ function checkLocalStorage () {
     const drawToInt = parseInt(overalResult[2]);
     if (typeof overalResult !== "object" || overalResult.length !== 3 || winsToInt === 'NaN'
     || losesToInt === 'NaN'|| drawToInt === 'NaN') {
-        localStorage.setItem('overalgameResults', JSON.stringify(arr));
+        localStorage.setItem(`${lowerCaseUser}Score`, JSON.stringify(arr));
     }
 }
 
-overalResults()
-
-
-
-
+function roundFightArt(playerSelection, computerSelection) {
+    let newString = ' ';
+    for (let index = 1; index <= 18; index += 1) {
+        newString += fightArt[playerSelection][index];
+        newString += fightArt.xArt[index];
+        newString += fightArt[computerSelection][index];
+        newString += '\n';
+    }
+    
+    console.log(newString)
+}
